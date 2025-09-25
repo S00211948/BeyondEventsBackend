@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:file:application-secrets.yml # This is a locally stored file you can find in the private discord server, only contains postgres URL, Username and Password
+    import: classpath:application-secrets.yml # This is a locally stored file you can find in the private discord server, only contains postgres URL, Username and Password
   datasource:
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -10,3 +10,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /

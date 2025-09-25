@@ -16,4 +16,8 @@ public class EventService {
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
+
+    public List<Event> getAllEventsByTitle(String title) {
+        return eventRepository.findByTitle(title);
+    }
 }
