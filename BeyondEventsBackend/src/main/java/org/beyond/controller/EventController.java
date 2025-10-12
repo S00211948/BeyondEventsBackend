@@ -1,33 +1,26 @@
 package org.beyond.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.beyond.model.Category;
 import org.beyond.model.Event;
-import org.beyond.model.User;
 import org.beyond.model.Location;
+import org.beyond.model.User;
 import org.beyond.requests.RequestEvent;
 import org.beyond.service.CategoryService;
 import org.beyond.service.EventService;
 import org.beyond.service.LocationService;
 import org.beyond.service.UserService;
-//import org.beyond.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
-//import java.lang.reflect.AccessFlag.Location;
 import java.util.List;
 import java.util.UUID;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-
 
 @RestController
 @RequestMapping("/api/events")
 @CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class EventController {
 
     @Autowired
@@ -44,6 +37,7 @@ public class EventController {
 
     @GetMapping
     public List<Event> getAllEventsFromDb() {
+        log.info("Get all events triggered");
         return eventService.getAllEvents();
     }
 
@@ -68,15 +62,15 @@ public class EventController {
         Category category = categoryService.getCategoryByID(entity.category_Id);
 
         Event newEvent = Event.builder()
-        .title(entity.title)
-        .description(entity.description)
-        .startTime(entity.startTime)
-        .endTime(entity.endTime)
-        .createdAt(OffsetDateTime.now())
-        .organizer(organizer)
-        .location(location)
-        .category(category)
-        .build();
+                .title(entity.title)
+                .description(entity.description)
+                .startTime(entity.startTime)
+                .endTime(entity.endTime)
+                .createdAt(OffsetDateTime.now())
+                .organizer(organizer)
+                .location(location)
+                .category(category)
+                .build();
 
         eventService.addNewEvent(newEvent);
         return "Success!";
@@ -84,35 +78,26 @@ public class EventController {
 
     @PutMapping("/update/{id}")
     public String putMethodName(@PathVariable String id, @RequestBody Event entity) {
-        if(eventService.updateEvent(entity) != null)
-        {
+        if (eventService.updateEvent(entity) != null) {
             return "Success!";
-        }
-        else
-        {
+        } else {
             return "Error: No such Event";
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteByID(@PathVariable("id") UUID id){
-        if(eventService.getEventByID(id) != null)
-        {
+    public String deleteByID(@PathVariable("id") UUID id) {
+        if (eventService.getEventByID(id) != null) {
             eventService.deleteByID(id);
-            if(eventService.getEventByID(id) == null)
-            {
+            if (eventService.getEventByID(id) == null) {
                 return "Success!";
-            }
-            else
-            {
+            } else {
                 return "Failed to delete.";
             }
-        }
-        else
-        {
+        } else {
             return "No such Event";
         }
     }
-    
+
 
 }

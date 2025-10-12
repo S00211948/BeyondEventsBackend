@@ -5,21 +5,17 @@ import org.beyond.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
-
 @Service
 public class UserService {
 
     @Autowired
     UserRepository userRepository;
 
-    public User getUserByID(UUID Id) {
-        return userRepository.findByid(Id);
+    public User getUserByID(String id) {
+        return userRepository.findByid(id);
     }
 
-    public User addNewUser(User u)
-    {
+    public User addNewUser(User u) {
         return userRepository.save(u);
     }
 }

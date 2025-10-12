@@ -39,3 +39,6 @@ build/
 
 ### Secrets ###
 src/main/resources/application-secrets.yml
+
+### Run Configurations ###
+.idea/runConfigurations/Main.xml

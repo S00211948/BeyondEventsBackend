@@ -22,7 +22,7 @@ public class Event {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "organizerS_id")
+    @JoinColumn(name = "organizer_id")
     private User organizer;
 
     @Column(nullable = false)
