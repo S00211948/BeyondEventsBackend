@@ -1,53 +1,39 @@
 package org.beyond.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.beyond.dto.UserDto;
-import org.beyond.model.User;
-import org.beyond.repository.UserRepository;
+import org.beyond.service.MsTeamsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
-
-import static java.util.Objects.isNull;
-
 @RestController
 @RequestMapping("/teams")
+@CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class TeamsController {
 
     @Autowired
-    private UserRepository users;
+    MsTeamsService teamsService;
 
     @GetMapping("/me")
     public UserDto me(@AuthenticationPrincipal Jwt jwt) {
+        log.info("Login commenced");
         String oid = jwt.getClaimAsString("oid");
         String email = jwt.getClaimAsString("preferred_username");
         String name = jwt.getClaimAsString("name");
 
-        User user = users.findById(oid).orElse(null);
-        if (isNull(user)) {
-            User u = new User();
-            u.setId(oid);
-            u.setEmail(email);
-            u.setName(name);
-            u.setCreatedAt(Instant.now());
-            users.save(u);
-        }
-        // Upsert email/name if changed
-        boolean changed = false;
-        if (email != null && !email.equals(user.getEmail())) {
-            user.setEmail(email);
-            changed = true;
-        }
-        if (name != null && !name.equals(user.getName())) {
-            user.setName(name);
-            changed = true;
-        }
-        if (changed) users.save(user);
+        return teamsService.teamsLogin(oid, email, name);
+    }
 
-        return new UserDto(user.getId(), user.getEmail(), user.getName());
+    @GetMapping(value = "/me/photo", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> mePhoto(@AuthenticationPrincipal Jwt jwt) {
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(teamsService.getTeamsProfileIcon(jwt));
     }
 }

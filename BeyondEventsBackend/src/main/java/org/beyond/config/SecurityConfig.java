@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())                  // JWT/REST: usually disable
+                .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -44,6 +44,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/actuator/health", "/actuator/info", "/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+                        .requestMatchers("/teams/**").hasAuthority(requiredScope)
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt());
@@ -54,11 +55,9 @@ public class SecurityConfig {
     @Bean
     JwtDecoder jwtDecoder() {
         NimbusJwtDecoder decoder = JwtDecoders.fromIssuerLocation(this.issuer);
-
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(this.issuer);
         OAuth2TokenValidator<Jwt> audience = new AudienceValidator(this.expectedAudience);
         decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(withIssuer, audience));
-
         return decoder;
     }
 }
