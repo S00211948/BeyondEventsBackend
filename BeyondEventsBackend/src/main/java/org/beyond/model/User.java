@@ -1,12 +1,15 @@
 package org.beyond.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "users")
@@ -16,17 +19,13 @@ import java.time.OffsetDateTime;
 @Data
 public class User {
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "varchar", updatable = false, nullable = false)
     private String id;
 
-    @Column(unique = true)
     private String email;
 
-    private String displayName;
-    
+    private String name;
+
     @Column(name = "created_at", nullable = false, updatable = false,
             columnDefinition = "timestamp with time zone default now()")
-    private OffsetDateTime createdAt;
-
+    private Instant createdAt;
 }

@@ -1,18 +1,36 @@
 spring:
-  config:
-    import: classpath:application-secrets.yml # This is a locally stored file you can find in the private discord server, only contains postgres URL, Username and Password
+  # Database Config
   datasource:
+    url: ${JDBC_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+  hikari:
+    maximum-pool-size: 5
+    minimum-idle: 1
+    connection-timeout: 30000
+    idle-timeout: 60000
+    max-lifetime: 600000
+    keepalive-time: 300000
   jpa:
-    hibernate:
-      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  # Security Config
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}/v2.0
+          jwk-set-uri: https://login.microsoftonline.com/${AZURE_AD_TENANT_ID}/discovery/v2.0/keys
+# Health Config
 management:
   endpoints:
     web:
       exposure:
         include: health
       base-path: /
+app:
+  expected-audience: ${AZURE_AD_CLIENT_ID}
+  required-scope: access_as_user
