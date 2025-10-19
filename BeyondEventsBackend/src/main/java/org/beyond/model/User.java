@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -18,8 +17,8 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID id;
+    @Column(columnDefinition = "varchar", updatable = false, nullable = false)
+    private String id;
 
     @Column(unique = true)
     private String email;

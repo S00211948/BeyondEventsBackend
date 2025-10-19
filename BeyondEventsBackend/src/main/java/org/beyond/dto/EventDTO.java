@@ -1,9 +1,9 @@
-package org.beyond.requests;
+package org.beyond.dto;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public class RequestEvent {
+public class EventDTO {
     public String title;
 
     public String description;
@@ -12,7 +12,7 @@ public class RequestEvent {
 
     public OffsetDateTime endTime;
 
-    public UUID organizer_Id;
+    public String organizer_Id;
 
     public Long category_Id;
 

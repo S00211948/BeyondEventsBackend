@@ -5,8 +5,7 @@ import org.beyond.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -14,7 +13,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public User getUserByID(UUID Id) {
+    public Optional<User> getUserByID(String Id) {
         return userRepository.findByid(Id);
     }
 
