@@ -6,10 +6,10 @@ import org.springframework.stereotype.Repository;
 
 //import java.util.UUID;
 import java.lang.Long;
-import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> { 
-    Category findByid(Long id);
+    Optional<Category> findByid(Long id);
 }

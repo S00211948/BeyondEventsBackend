@@ -1,9 +1,9 @@
-package org.beyond.requests;
+package org.beyond.dto;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public class RequestEvent {
+public class EventDTO {
     public String title;
 
     public String description;

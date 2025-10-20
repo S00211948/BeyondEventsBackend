@@ -1,21 +1,26 @@
 package org.beyond.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.beyond.dto.EventDTO;
 import org.beyond.model.Category;
 import org.beyond.model.Event;
 import org.beyond.model.Location;
-import org.beyond.model.User;
-import org.beyond.requests.RequestEvent;
 import org.beyond.service.CategoryService;
 import org.beyond.service.EventService;
 import org.beyond.service.LocationService;
 import org.beyond.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import jakarta.persistence.EntityNotFoundException;
+
+
 
 @RestController
 @RequestMapping("/api/events")
@@ -53,27 +58,39 @@ public class EventController {
 
     //Add events / categories / location for individual post requests
     @PostMapping("/add")
-    public String addEvent(@RequestBody RequestEvent entity) {
-        User organizer = userService.getUserByID(entity.organizer_Id);
-        //.orElseThrow(() -> new RuntimeException("Organizer not found"));
+    public ResponseEntity<?> addEvent(@RequestBody EventDTO entity) {
+        try{
+            User organizer = userService.getUserByID(entity.organizer_Id)
+            .orElseThrow(() -> new EntityNotFoundException("Organizer not found"));
 
-        Location location = locationService.getLocationByID(entity.location_Id);
+            Location location = locationService.getLocationByID(entity.location_Id)
+            .orElseThrow(() -> new EntityNotFoundException("Location not found"));
 
-        Category category = categoryService.getCategoryByID(entity.category_Id);
+            Category category = categoryService.getCategoryByID(entity.category_Id)
+            .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
-        Event newEvent = Event.builder()
-                .title(entity.title)
-                .description(entity.description)
-                .startTime(entity.startTime)
-                .endTime(entity.endTime)
-                .createdAt(OffsetDateTime.now())
-                .organizer(organizer)
-                .location(location)
-                .category(category)
-                .build();
+            Event newEvent = Event.builder()
+            .title(entity.title)
+            .description(entity.description)
+            .startTime(entity.startTime)
+            .endTime(entity.endTime)
+            .createdAt(OffsetDateTime.now())
+            .organizer(organizer)
+            .location(location)
+            .category(category)
+            .build();
 
-        eventService.addNewEvent(newEvent);
-        return "Success!";
+            eventService.addNewEvent(newEvent);
+            return ResponseEntity.ok().body("Success!");
+        }
+        catch(EntityNotFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        catch(Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PutMapping("/update/{id}")
