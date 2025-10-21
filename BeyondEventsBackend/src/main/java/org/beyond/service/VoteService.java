@@ -15,20 +15,19 @@ public class VoteService {
     @Autowired
     VoteRepository voteRepository;
 
-    public List<Vote> getAllVotes(){
+    public List<Vote> getAllVotes() {
         return voteRepository.findAll();
     }
 
-    public Optional<Vote> getVoteByUserID(UUID Id) {
-        return voteRepository.findByUserID(Id);
+    public Optional<Vote> getVoteByUserID(String id) {
+        return voteRepository.findByUserID(id);
     }
 
-    public Optional<Vote> getVoteByEventID(UUID Id) {
-        return voteRepository.findByEventID(Id);
+    public Optional<Vote> getVoteByEventID(UUID id) {
+        return voteRepository.findByEventID(id);
     }
 
-    public Vote addNewVote(Vote u)
-    {
+    public Vote addNewVote(Vote u) {
         return voteRepository.save(u);
     }
 }

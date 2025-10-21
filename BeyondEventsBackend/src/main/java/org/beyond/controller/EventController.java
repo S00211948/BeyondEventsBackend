@@ -1,10 +1,12 @@
 package org.beyond.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.beyond.dto.EventDTO;
 import org.beyond.model.Category;
 import org.beyond.model.Event;
 import org.beyond.model.Location;
+import org.beyond.model.User;
 import org.beyond.service.CategoryService;
 import org.beyond.service.EventService;
 import org.beyond.service.LocationService;
@@ -17,9 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
-
-import jakarta.persistence.EntityNotFoundException;
-
 
 
 @RestController
@@ -59,36 +58,32 @@ public class EventController {
     //Add events / categories / location for individual post requests
     @PostMapping("/add")
     public ResponseEntity<?> addEvent(@RequestBody EventDTO entity) {
-        try{
+        try {
             User organizer = userService.getUserByID(entity.organizer_Id)
-            .orElseThrow(() -> new EntityNotFoundException("Organizer not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Organizer not found"));
 
             Location location = locationService.getLocationByID(entity.location_Id)
-            .orElseThrow(() -> new EntityNotFoundException("Location not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Location not found"));
 
             Category category = categoryService.getCategoryByID(entity.category_Id)
-            .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
             Event newEvent = Event.builder()
-            .title(entity.title)
-            .description(entity.description)
-            .startTime(entity.startTime)
-            .endTime(entity.endTime)
-            .createdAt(OffsetDateTime.now())
-            .organizer(organizer)
-            .location(location)
-            .category(category)
-            .build();
+                    .title(entity.title)
+                    .description(entity.description)
+                    .startTime(entity.startTime)
+                    .endTime(entity.endTime)
+                    .createdAt(OffsetDateTime.now())
+                    .organizer(organizer)
+                    .location(location)
+                    .category(category)
+                    .build();
 
             eventService.addNewEvent(newEvent);
             return ResponseEntity.ok().body("Success!");
-        }
-        catch(EntityNotFoundException e)
-        {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -115,6 +110,4 @@ public class EventController {
             return "No such Event";
         }
     }
-
-
 }
