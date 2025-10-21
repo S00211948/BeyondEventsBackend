@@ -5,6 +5,7 @@ import org.beyond.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,14 +13,17 @@ import java.util.UUID;
 public class LocationService {
 
     @Autowired
-    LocationRepository LocationRepository;
+    LocationRepository locationRepository;
 
-    public Optional<Location> getLocationByID(UUID Id) {
-        return LocationRepository.findByid(Id);
+    public Optional<Location> getLocationByID(UUID id) {
+        return locationRepository.findByid(id);
     }
 
-    public Location addNewLocation(Location u)
-    {
-        return LocationRepository.save(u);
+    public List<Location> getAllLocations() {
+        return locationRepository.findAll();
+    }
+
+    public Location addNewLocation(Location u) {
+        return locationRepository.save(u);
     }
 }
