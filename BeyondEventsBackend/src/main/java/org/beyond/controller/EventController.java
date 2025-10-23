@@ -5,6 +5,7 @@ import org.beyond.dto.EventDTO;
 import org.beyond.model.Category;
 import org.beyond.model.Event;
 import org.beyond.model.Location;
+import org.beyond.model.User;
 import org.beyond.service.CategoryService;
 import org.beyond.service.EventService;
 import org.beyond.service.LocationService;

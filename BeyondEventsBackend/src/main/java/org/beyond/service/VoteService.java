@@ -19,7 +19,7 @@ public class VoteService {
         return voteRepository.findAll();
     }
 
-    public Optional<Vote> getVoteByUserID(UUID Id) {
+    public Optional<Vote> getVoteByUserID(String Id) {
         return voteRepository.findByUserID(Id);
     }
 

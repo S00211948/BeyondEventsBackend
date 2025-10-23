@@ -44,6 +44,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/actuator/health", "/actuator/info", "/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/events/**").permitAll()
                         .requestMatchers("/teams/**").hasAuthority(requiredScope)
                         .anyRequest().authenticated()
                 )

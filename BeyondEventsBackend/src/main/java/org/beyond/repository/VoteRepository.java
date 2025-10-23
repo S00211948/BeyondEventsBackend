@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, VoteID> { 
-    Optional<Vote> findByUserID(UUID id);
+    Optional<Vote> findByUserID(String id);
 
     Optional<Vote> findByEventID(UUID id);
 }
