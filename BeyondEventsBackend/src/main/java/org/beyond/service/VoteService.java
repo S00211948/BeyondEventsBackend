@@ -31,4 +31,9 @@ public class VoteService {
     {
         return voteRepository.save(u);
     }
+
+    public void organizeEvents()
+    {
+
+    }
 }

@@ -6,7 +6,10 @@ import org.beyond.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,7 +29,7 @@ public class EventService {
         return eventRepository.findByTitle(title);
     }
 
-    public Event getEventByID(UUID id) {
+    public Optional<Event> getEventByID(UUID id) {
         return eventRepository.findByid(id);
     }
 
@@ -40,7 +43,8 @@ public class EventService {
 
     public Event updateEvent(Event e) //throws NoSuchObjectException
     {
-        Event existing = getEventByID(e.getId());
+        Event existing = getEventByID(e.getId())
+        .orElseThrow(() -> new EntityNotFoundException("Event not found"));
         if (existing != null) {
             existing.setTitle(e.getTitle());
             existing.setDescription(e.getDescription());
