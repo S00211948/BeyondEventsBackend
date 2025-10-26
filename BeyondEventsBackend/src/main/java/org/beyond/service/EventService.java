@@ -19,6 +19,13 @@ public class EventService {
     public List<Event> getAllEvents() {
         List<Event> events = eventRepository.findAll();
         log.info("Returned events: {}", events);
+
+        return events;
+    }
+
+    public List<Event> getAllMainEvents() {
+        List<Event> events = eventRepository.findAllMainEvents();
+        log.info("Returned main events: {}", events);
         return events;
     }
 

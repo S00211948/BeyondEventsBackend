@@ -45,6 +45,12 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
+    @GetMapping("/main")
+    public List<Event> getAllMainEventsFromDb() {
+        log.info("Get all events triggered");
+        return eventService.getAllMainEvents();
+    }
+
     @GetMapping("/sub-events/{parentUuid}")
     public List<Event> getAllEventsByParentEventFromDb(@PathVariable UUID parentUuid) {
         return eventService.getAllEventsByParentUuid(parentUuid);
