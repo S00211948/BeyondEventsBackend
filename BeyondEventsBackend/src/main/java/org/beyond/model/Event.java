@@ -52,4 +52,7 @@ public class Event {
     @Column(name = "created_at", nullable = false, updatable = false,
             columnDefinition = "timestamp with time zone default now()")
     private OffsetDateTime createdAt;
+
+    @Column(columnDefinition = "parent_uuid")
+    private UUID parentUuid;
 }

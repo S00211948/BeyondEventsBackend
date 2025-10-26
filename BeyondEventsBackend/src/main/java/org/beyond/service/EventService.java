@@ -26,6 +26,10 @@ public class EventService {
         return eventRepository.findByTitle(title);
     }
 
+    public List<Event> getAllEventsByParentUuid(UUID parentUuid) {
+        return eventRepository.findByParentUuid(parentUuid);
+    }
+
     public Event getEventByID(UUID id) {
         return eventRepository.findByid(id);
     }

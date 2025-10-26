@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface EventRepository extends JpaRepository<Event, UUID> {
     List<Event> findByTitle(String title);
 
+    List<Event> findByParentUuid(UUID parentUuid);
+
     Event findByid(UUID id);
 
     //boolean deleteByid(UUID id);
