@@ -2,7 +2,7 @@ package org.beyond.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.beyond.dto.UserDto;
-import org.beyond.model.User;
+import org.beyond.model.UserEntity;
 import org.beyond.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +34,8 @@ public class MsTeamsService {
     private final RestClient http = RestClient.create();
 
     public UserDto teamsLogin(String oid, String email, String name) {
-        User user = users.findById(oid).orElseGet(() -> {
-            User u = new User();
+        UserEntity userEntity = users.findById(oid).orElseGet(() -> {
+            UserEntity u = new UserEntity();
             u.setId(oid);
             u.setEmail(email);
             u.setName(name);
@@ -46,18 +46,18 @@ public class MsTeamsService {
 
         // Upsert if email/name if changed
         boolean changed = false;
-        if (email != null && !email.equals(user.getEmail())) {
-            user.setEmail(email);
+        if (email != null && !email.equals(userEntity.getEmail())) {
+            userEntity.setEmail(email);
             changed = true;
         }
-        if (name != null && !name.equals(user.getName())) {
-            user.setName(name);
+        if (name != null && !name.equals(userEntity.getName())) {
+            userEntity.setName(name);
             changed = true;
         }
-        if (changed) users.save(user);
+        if (changed) users.save(userEntity);
 
-        log.info("Upsert finished {}", user);
-        return new UserDto(user.getId(), user.getEmail(), user.getName());
+        log.info("Upsert finished {}", userEntity);
+        return new UserDto(userEntity.getId(), userEntity.getEmail(), userEntity.getName());
     }
 
     public byte[] getTeamsProfileIcon(Jwt jwt) {

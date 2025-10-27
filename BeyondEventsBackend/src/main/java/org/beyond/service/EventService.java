@@ -1,11 +1,17 @@
 package org.beyond.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.beyond.model.Event;
+import org.beyond.dto.EventDTO;
+import org.beyond.model.CategoryEntity;
+import org.beyond.model.EventEntity;
+import org.beyond.model.LocationEntity;
+import org.beyond.model.UserEntity;
 import org.beyond.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,49 +22,80 @@ public class EventService {
     @Autowired
     EventRepository eventRepository;
 
-    public List<Event> getAllEvents() {
-        List<Event> events = eventRepository.findAll();
-        log.info("Returned events: {}", events);
+    @Autowired
+    CategoryService categoryService;
 
-        return events;
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    LocationService locationService;
+
+    public List<EventEntity> getAllEvents() {
+        List<EventEntity> eventEntities = eventRepository.findAll();
+        log.info("Returned events: {}", eventEntities);
+
+        return eventEntities;
     }
 
-    public List<Event> getAllMainEvents() {
-        List<Event> events = eventRepository.findAllMainEvents();
-        log.info("Returned main events: {}", events);
-        return events;
+    public List<EventEntity> getAllMainEvents() {
+        List<EventEntity> eventEntities = eventRepository.findAllMainEvents();
+        log.info("Returned main events: {}", eventEntities);
+        return eventEntities;
     }
 
-    public List<Event> getAllEventsByTitle(String title) {
+    public List<EventEntity> getAllEventsByTitle(String title) {
         return eventRepository.findByTitle(title);
     }
 
-    public List<Event> getAllEventsByParentUuid(UUID parentUuid) {
+    public List<EventEntity> getAllEventsByParentUuid(UUID parentUuid) {
         return eventRepository.findByParentUuid(parentUuid);
     }
 
-    public Event getEventByID(UUID id) {
+    public EventEntity getEventByID(UUID id) {
         return eventRepository.findByid(id);
     }
 
-    public Event addNewEvent(Event e) {
-        return eventRepository.save(e);
+    public EventEntity addNewEvent(EventDTO eventDto) {
+        UserEntity organizer = userService.getUserByID(eventDto.organizer_Id)
+                .orElseThrow(() -> new EntityNotFoundException("Organizer not found"));
+
+        LocationEntity locationEntity = locationService.getLocationByID(eventDto.location_Id)
+                .orElseThrow(() -> new EntityNotFoundException("Location not found"));
+
+        CategoryEntity categoryEntity = categoryService.getCategoryByID(eventDto.category_Id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        EventEntity newEventEntity = EventEntity.builder()
+                .title(eventDto.title)
+                .description(eventDto.description)
+                .startTime(eventDto.startTime)
+                .endTime(eventDto.endTime)
+                .createdAt(OffsetDateTime.now())
+                .organizer(organizer)
+                .locationEntity(locationEntity)
+                .categoryEntity(categoryEntity)
+                .organizationFeatures(eventDto.features)
+                .iconImageUrl(eventDto.iconImageUrl)
+                .build();
+
+        return eventRepository.save(newEventEntity);
     }
 
     public void deleteByID(UUID id) {
         eventRepository.deleteById(id);
     }
 
-    public Event updateEvent(Event e) //throws NoSuchObjectException
+    public EventEntity updateEvent(EventEntity e) //throws NoSuchObjectException
     {
-        Event existing = getEventByID(e.getId());
+        EventEntity existing = getEventByID(e.getId());
         if (existing != null) {
             existing.setTitle(e.getTitle());
             existing.setDescription(e.getDescription());
             existing.setStartTime(e.getStartTime());
             existing.setEndTime(e.getEndTime());
-            existing.setCategory(e.getCategory());
-            existing.setLocation(e.getLocation());
+            existing.setCategoryEntity(e.getCategoryEntity());
+            existing.setLocationEntity(e.getLocationEntity());
             existing.setOrganizer(e.getOrganizer());
 
             return eventRepository.save(existing);

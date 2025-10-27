@@ -1,7 +1,7 @@
 package org.beyond.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.beyond.model.Category;
+import org.beyond.model.CategoryEntity;
 import org.beyond.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +21,7 @@ public class CategoryController {
     CategoryService categoryService;
 
     @GetMapping
-    public List<Category> getAllCategories() {
+    public List<CategoryEntity> getAllCategories() {
         return categoryService.getAllCategories();
     }
 }

@@ -3,20 +3,15 @@ package org.beyond.controller;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.beyond.dto.EventDTO;
-import org.beyond.model.Category;
-import org.beyond.model.Event;
-import org.beyond.model.Location;
-import org.beyond.model.User;
+import org.beyond.model.CategoryEntity;
+import org.beyond.model.EventEntity;
 import org.beyond.service.CategoryService;
 import org.beyond.service.EventService;
-import org.beyond.service.LocationService;
-import org.beyond.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,74 +28,48 @@ public class EventController {
     @Autowired
     CategoryService categoryService;
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    LocationService locationService;
-
     @GetMapping
-    public List<Event> getAllEventsFromDb() {
+    public List<EventEntity> getAllEventsFromDb() {
         log.info("Get all events triggered");
         return eventService.getAllEvents();
     }
 
     @GetMapping("/main")
-    public List<Event> getAllMainEventsFromDb() {
+    public List<EventEntity> getAllMainEventsFromDb() {
         log.info("Get all events triggered");
         return eventService.getAllMainEvents();
     }
 
     @GetMapping("/sub-events/{parentUuid}")
-    public List<Event> getAllEventsByParentEventFromDb(@PathVariable UUID parentUuid) {
+    public List<EventEntity> getAllEventsByParentEventFromDb(@PathVariable UUID parentUuid) {
         return eventService.getAllEventsByParentUuid(parentUuid);
     }
 
     @GetMapping("/{title}")
-    public List<Event> getEventsByTitleFromDb(@PathVariable String title) {
+    public List<EventEntity> getEventsByTitleFromDb(@PathVariable String title) {
         return eventService.getAllEventsByTitle(title);
     }
 
     @GetMapping("/categories")
-    public List<Category> getAllCategoriesFromDb() {
+    public List<CategoryEntity> getAllCategoriesFromDb() {
         return categoryService.getAllCategories();
     }
 
     //Add events / categories / location for individual post requests
     @PostMapping("/add")
-    public ResponseEntity<?> addEvent(@RequestBody EventDTO entity) {
+    public ResponseEntity<?> addEvent(@RequestBody EventDTO eventDTO) {
         try {
-            User organizer = userService.getUserByID(entity.organizer_Id)
-                    .orElseThrow(() -> new EntityNotFoundException("Organizer not found"));
-
-            Location location = locationService.getLocationByID(entity.location_Id)
-                    .orElseThrow(() -> new EntityNotFoundException("Location not found"));
-
-            Category category = categoryService.getCategoryByID(entity.category_Id)
-                    .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-
-            Event newEvent = Event.builder()
-                    .title(entity.title)
-                    .description(entity.description)
-                    .startTime(entity.startTime)
-                    .endTime(entity.endTime)
-                    .createdAt(OffsetDateTime.now())
-                    .organizer(organizer)
-                    .location(location)
-                    .category(category)
-                    .build();
-
-            eventService.addNewEvent(newEvent);
-            return ResponseEntity.ok().body("Success!");
+            EventEntity eventEntity = eventService.addNewEvent(eventDTO);
+            return ResponseEntity.ok().body(eventEntity);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
     @PutMapping("/update/{id}")
-    public String putMethodName(@PathVariable String id, @RequestBody Event entity) {
+    public String putMethodName(@PathVariable String id, @RequestBody EventEntity entity) {
         if (eventService.updateEvent(entity) != null) {
             return "Success!";
         } else {

@@ -17,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 @Data
-public class User {
+public class UserEntity {
     @Id
     private String id;
 

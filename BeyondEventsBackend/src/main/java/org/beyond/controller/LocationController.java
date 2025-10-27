@@ -1,7 +1,7 @@
 package org.beyond.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.beyond.model.Location;
+import org.beyond.model.LocationEntity;
 import org.beyond.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +20,7 @@ public class LocationController {
     LocationService locationService;
 
     @GetMapping
-    public List<Location> getAllLocations() {
+    public List<LocationEntity> getAllLocations() {
         return locationService.getAllLocations();
     }
 }

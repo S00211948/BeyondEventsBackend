@@ -1,6 +1,6 @@
 package org.beyond.controller;
 
-import org.beyond.model.Vote;
+import org.beyond.model.VoteEntity;
 import org.beyond.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +19,7 @@ public class VoteController {
     VoteService voteService;
 
     @GetMapping
-    public List<Vote> getAllVotesFromDb() {
+    public List<VoteEntity> getAllVotesFromDb() {
         return voteService.getAllVotes();
     }
 

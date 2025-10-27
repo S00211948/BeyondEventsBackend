@@ -1,6 +1,6 @@
 package org.beyond.service;
 
-import org.beyond.model.Category;
+import org.beyond.model.CategoryEntity;
 import org.beyond.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +14,11 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public List<Category> getAllCategories() {
+    public List<CategoryEntity> getAllCategories() {
         return categoryRepository.findAll();
     }
 
-    public Optional<Category> getCategoryByID(Long Id){
+    public Optional<CategoryEntity> getCategoryByID(Long Id) {
         return categoryRepository.findByid(Id);
     }
 }
