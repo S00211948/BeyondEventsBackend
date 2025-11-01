@@ -61,6 +61,7 @@ public class MsTeamsService {
     }
 
     public byte[] getTeamsProfileIcon(Jwt jwt) {
+        log.info("Retrieving teams profile icon");
         String graphToken = exchangeForGraphToken(jwt.getTokenValue(), "User.Read");
         return http.get()
                 .uri("https://graph.microsoft.com/v1.0/me/photos/64x64/$value")

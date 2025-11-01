@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Feature {
+public enum OrganizationFeatures {
     VOTING("VOTING"),
     TIMETABLE("TIMETABLE"),
     COMMENTS("COMMENTS"),

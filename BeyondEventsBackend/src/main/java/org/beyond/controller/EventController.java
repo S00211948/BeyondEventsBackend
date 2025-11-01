@@ -36,7 +36,7 @@ public class EventController {
 
     @GetMapping("/main")
     public List<EventEntity> getAllMainEventsFromDb() {
-        log.info("Get all events triggered");
+        log.info("Get all main events triggered");
         return eventService.getAllMainEvents();
     }
 
