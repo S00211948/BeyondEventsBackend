@@ -77,6 +77,7 @@ public class EventService {
                 .categoryEntity(categoryEntity)
                 .organizationFeatures(eventDto.features)
                 .iconImageUrl(eventDto.iconImageUrl)
+                .parentUuid(eventDto.parent_uuid)
                 .build();
 
         return eventRepository.save(newEventEntity);

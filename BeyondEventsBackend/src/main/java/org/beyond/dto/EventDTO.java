@@ -22,4 +22,6 @@ public class EventDTO {
     public Set<String> features;
 
     public String iconImageUrl;
+
+    public UUID parent_uuid;
 }
