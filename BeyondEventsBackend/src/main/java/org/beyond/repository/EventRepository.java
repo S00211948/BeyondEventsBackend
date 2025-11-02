@@ -15,7 +15,7 @@ public interface EventRepository extends JpaRepository<EventEntity, UUID> {
 
     Optional<List<EventEntity>> findByParentUuid(UUID parentUuid);
 
-    EventEntity findByid(UUID id);
+    Optional<EventEntity> findByid(UUID id);
 
     @Query(value = "SELECT * FROM events WHERE parent_uuid is null",
             nativeQuery = true)

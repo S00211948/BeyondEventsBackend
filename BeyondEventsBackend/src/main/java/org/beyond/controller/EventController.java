@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.beyond.dto.EventDTO;
 import org.beyond.model.CategoryEntity;
 import org.beyond.model.EventEntity;
-import org.beyond.model.User;
+import org.beyond.model.UserEntity;
 import org.beyond.service.CategoryService;
 import org.beyond.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -42,7 +43,7 @@ public class EventController {
     }
 
     @GetMapping("/sub-events/{parentUuid}")
-    public List<EventEntity> getAllEventsByParentEventFromDb(@PathVariable UUID parentUuid) {
+    public Optional<List<EventEntity>> getAllEventsByParentEventFromDb(@PathVariable UUID parentUuid) {
         return eventService.getAllEventsByParentUuid(parentUuid);
     }
 
