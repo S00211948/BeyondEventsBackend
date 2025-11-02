@@ -1,6 +1,8 @@
 package org.beyond.controller;
 
 import org.beyond.model.VoteEntity;
+import org.beyond.service.EventService;
+import org.beyond.service.UserService;
 import org.beyond.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,13 +28,19 @@ public class VoteController {
     @Autowired
     VoteService voteService;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    EventService eventService;
+
     @GetMapping
     public List<VoteEntity> getAllVotesFromDb() {
         return voteService.getAllVotes();
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addVote(@RequestBody Vote entity) {
+    public ResponseEntity<?> addVote(@RequestBody VoteEntity entity) {
         try
         {
             userService.getUserByID(entity.getUserID())

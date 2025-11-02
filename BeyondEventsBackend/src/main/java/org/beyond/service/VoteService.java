@@ -33,7 +33,7 @@ public class VoteService {
 
     public void organizeEvents()
     {
-        List<Vote> votes = getAllVotes();
+        List<VoteEntity> votes = getAllVotes();
         
     }
 }
