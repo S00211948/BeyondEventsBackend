@@ -1,9 +1,5 @@
 package org.beyond.model;
 
-import java.util.UUID;
-
-import org.beyond.model.id_objects.VoteID;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,18 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "votes")
+@Table(name = "categories")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-@IdClass(VoteID.class)
-public class Vote {
+public class CategoryEntity {
     @Id
-    private String userID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Id
-    private UUID eventID;
-
-    private int value;
+    @Column(nullable = false, unique = true)
+    private String name;
 }

@@ -1,12 +1,7 @@
 package org.beyond.controller;
 
-import java.util.List;
-
-import org.beyond.model.Vote;
-import org.beyond.service.EventService;
-import org.beyond.service.UserService;
+import org.beyond.model.VoteEntity;
 import org.beyond.service.VoteService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,22 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/votes")
 @CrossOrigin(origins = "http://localhost:3000")
 public class VoteController {
 
     @Autowired
-    EventService eventService;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
     VoteService voteService;
 
     @GetMapping
-    public List<Vote> getAllVotesFromDb() {
+    public List<VoteEntity> getAllVotesFromDb() {
         return voteService.getAllVotes();
     }
 

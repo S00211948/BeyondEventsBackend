@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Data
-public class Event {
+public class EventEntity {
     @Id
     @GeneratedValue
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
@@ -23,7 +24,7 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organizer_id")
-    private User organizer;
+    private UserEntity organizer;
 
     @Column(nullable = false)
     private String title;
@@ -33,11 +34,11 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "location_id")
-    private Location location;
+    private LocationEntity locationEntity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    private Category category;
+    private CategoryEntity categoryEntity;
 
     @Column(name = "start_time", nullable = false)
     private OffsetDateTime startTime;
@@ -47,9 +48,18 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recurring_ref_id")
-    private Event recurringRef;
+    private EventEntity recurringRef;
 
     @Column(name = "created_at", nullable = false, updatable = false,
             columnDefinition = "timestamp with time zone default now()")
     private OffsetDateTime createdAt;
+
+    @Column(columnDefinition = "parent_uuid")
+    private UUID parentUuid;
+
+    @Column(name = "organization_features")
+    private Set<String> organizationFeatures;
+
+    @Column(name = "icon_image_location")
+    private String iconImageUrl;
 }

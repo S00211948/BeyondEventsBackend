@@ -39,6 +39,8 @@ build/
 
 ### Secrets ###
 src/main/resources/application-secrets.yml
+.vscode
 
 ### Run Configurations ###
 .idea/runConfigurations/Main.xml
+.env
